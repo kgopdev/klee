@@ -15,7 +15,7 @@
 #include "llvm/Support/raw_ostream.h"
 #include <fstream>
 #include <sstream>
-
+#include <system_error>
 using namespace klee;
 
 /// This abstract class represents a solver that is capable of logging 
@@ -27,6 +27,7 @@ class QueryLoggingSolver : public SolverImpl {
 protected:
     Solver *solver;
     std::string ErrorInfo;
+    std::error_code ec;
     llvm::raw_fd_ostream os;
     // @brief Buffer used by logBuffer
     std::string BufferString;

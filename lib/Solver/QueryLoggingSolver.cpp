@@ -3,7 +3,7 @@
 #include "QueryLoggingSolver.h"
 #include "klee/Internal/System/Time.h"
 #include "klee/Statistics.h"
-
+#include <system_error>
 #if LLVM_VERSION_CODE >= LLVM_VERSION(3, 5)
 #include "llvm/Support/FileSystem.h"
 #endif
@@ -23,7 +23,10 @@ QueryLoggingSolver::QueryLoggingSolver(Solver *_solver,
                                        const std::string& commentSign,
                                        int queryTimeToLog)                                  
     : solver(_solver),
-#if LLVM_VERSION_CODE >= LLVM_VERSION(3, 5)
+#if LLVM_VERSION_CODE >= LLVM_VERSION(3, 6)
+      
+      os(path.c_str(), ec, llvm::sys::fs::OpenFlags::F_Text),
+#elif LLVM_VERSION_CODE >= LLVM_VERSION(3, 5)
       os(path.c_str(), ErrorInfo, llvm::sys::fs::OpenFlags::F_Text),
 #else
       os(path.c_str(), ErrorInfo),
